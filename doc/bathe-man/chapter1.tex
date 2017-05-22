@@ -1,0 +1,135 @@
+\chapter{Finite Elements for solids and structures}
+
+\section{Control load methods}
+
+\subsection{Newton-Raphson}
+
+\subsection{Arc-length methods}
+
+Basically the idea is to imposed a variable external load that depends on a parameter $\lambda$ with the form:
+
+\begin{equation}
+\overline{f}_{\text{ext}} = \lambda \hat{f}
+\end{equation}
+
+So the equibrium equations can be expressed as:
+
+\begin{equation}
+\overline{f}_{\text{int}}(\overline{u}) = \lambda \hat{f}
+\end{equation}
+
+And a constrain equation which serves to limit the evolution of the solution on the $(\overline{u},\lambda)$ space.
+
+\begin{equation}
+\varphi(\overline{u},\lambda) = 0
+\end{equation}
+
+Finally the systems of equations to solve is:
+
+\begin{equation}
+\begin{cases} 
+\overline{f}_{\text{int}}(\overline{u}) - \lambda \hat{f} = 0\\ 
+\varphi(\overline{u},\lambda) = 0 
+\end{cases}
+\end{equation}
+
+that can be written in a matricial form as:
+
+\begin{equation}
+  \overline{R}(\overline{u},\lambda) =
+  \begin{bmatrix}
+  \overline{f}_{\text{int}}(\overline{u}) - \lambda \hat{f} \\ 
+  \varphi(\overline{u},\lambda) 
+  \end{bmatrix}
+  = \overline{0}
+\label{arclen_sys_eq}
+\end{equation}
+
+Applying a multidimensional Taylor expanssion to the expression \ref{arclen_sys_eq}:
+
+\begin{equation}
+  \overline{R}(\overline{u},\lambda) \approx
+  \overline{R}(\overline{u}_n,\lambda_n)
+  +
+  \begin{bmatrix}
+  \frac{\partial \overline{f}_{\text{int}}}{\partial\overline{u}} & -\hat{f} \\ 
+  \frac{\partial \varphi}{\partial\overline{u}} & \frac{\partial \varphi}{\partial\lambda} \\ 
+  \end{bmatrix}
+  \cdot
+  \begin{bmatrix}
+  \Delta u^i \\ 
+  \Delta \lambda^i 
+  \end{bmatrix}
+\end{equation}
+
+Where we want:
+
+\begin{equation}
+  \overline{R}(\overline{u},\lambda) = 0
+\end{equation}
+
+So the increments $ \Delta u^i$ and $\Delta \lambda^i$ can be calculated by an iterative procedure as:
+
+\begin{equation}
+  \begin{bmatrix}
+  \Delta u^i \\ 
+  \Delta \lambda^i 
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \frac{\partial \overline{f}_{\text{int}}}{\partial\overline{u}} & -\hat{f} \\ 
+  \frac{\partial \varphi}{\partial\overline{u}} & \frac{\partial \varphi}{\partial\lambda} \\ 
+  \end{bmatrix}^{-1}
+  \cdot
+  \overline{R}(\overline{u}_n^{i-1},\lambda_n^{i-1})
+\end{equation}
+
+and then simply:
+
+\begin{equation}
+\begin{cases} 
+  u^i = u^{i-1} + \Delta u^i\\
+  \lambda^i = \lambda^{i-1} + \Delta \lambda^i
+\end{cases} 
+\end{equation}
+
+
+
+
+The secret of the method is to determine a suitable function $\varphi(\overline{u},\lambda)$ according to the problem we
+want to solve.
+
+\subsubsection{Arc-Length method based on energy.}
+
+This method is similar to the one proposed on \cite{arclength_borst}. The basic idea is to select a
+$\varphi(\overline{u},\lambda)$  that updates at every time step and imposed a a constrain in energy accumulation or
+dissipation according to the phase of the problem.. 
+
+During a time step where no energy is dissipated, for example in a pure elastic situation the elastic energy acumulated
+can be expressed as:
+
+\begin{equation}
+U = \frac{1}{2}\left( \lambda \overline{u}^T - \lambda_n \overline{u}_{n}^T \right) = \Delta \tau^U
+\end{equation}
+
+so the constrain equation can be fix as :
+
+\begin{equation}
+\varphi^U(\overline{u},\lambda) = 
+\frac{1}{2}\left( \lambda \overline{u}^T - \lambda_n \overline{u}_{n}^T \right) - \Delta
+\tau^U = 0
+\end{equation}
+
+On the other hand on a dissipative situation, the energy lost by the system can be expressed as:
+
+\begin{equation}
+D = \frac{1}{2}\left( \lambda_n \overline{u}^T - \lambda \overline{u}_{n}^T \right) = \Delta \tau^D
+\end{equation}
+
+and the constrain can be written as:
+
+\begin{equation}
+\varphi^D(\overline{u},\lambda) = 
+\frac{1}{2}\left( \lambda_n \overline{u}^T - \lambda \overline{u}_{n}^T \right) - \Delta
+\tau^D = 0
+\end{equation}

@@ -1,0 +1,107 @@
+\chapter*{Bathe Input Manual}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{mygreen}{rgb}{0.3, 0.9, 0.1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Input file}
+
+\subsection{Mesh information}
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Red}{$mesh}
+
+    \textcolor{OliveGreen}{mesh_file}    ex2.msh
+    \textcolor{OliveGreen}{parfile_e}    ex2.epart
+    \textcolor{OliveGreen}{parfile_n}    ex2.npart
+
+\textcolor{Red}{$end_mesh} 
+\end{Verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Materials}
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Red}{$Materials}
+
+    \textcolor{OliveGreen}{"MAT"   3      10.0e10   0.2     1.0e6   150.0e-3    0.001}  
+    
+\textcolor{Red}{$EndMaterials}
+\end{Verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Calculation mode}
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\},samepage=true]
+\textcolor{Red}{$Mode}
+
+   \textcolor{OliveGreen}{geoappr     SD}  
+   \textcolor{OliveGreen}{timedep     QSTATIC}
+   \textcolor{OliveGreen}{t0          0.0 }
+   \textcolor{OliveGreen}{tf          0.01} 
+   \textcolor{OliveGreen}{steps       40} 
+   \textcolor{OliveGreen}{algorithm   ARC_LENGTH_4 }
+   \textcolor{OliveGreen}{d_work      1000.0 0.01 0.6}
+   \textcolor{OliveGreen}{r_tol       1.0e-5 }
+   \textcolor{OliveGreen}{max_its     100 }
+   \textcolor{OliveGreen}{k_restart   2} 
+
+\textcolor{Red}{$EndMode}
+\end{Verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Boundaries}
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Red}{$Boundary}
+
+   \textcolor{OliveGreen}{"FIX_B"   1   111   0   0   0} 
+   \textcolor{OliveGreen}{"FIX_F"   2   110   0   0   0} 
+   \textcolor{OliveGreen}{"MOV_B"   3   001   1   0   0} 
+   \textcolor{OliveGreen}{"MOV_F"   4   000   1   0   0} 
+   
+\textcolor{Red}{$EndBoundary}
+\end{Verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Function}
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Red}{$Function}
+
+   \textcolor{OliveGreen}{funcknd 1D} 
+   \textcolor{OliveGreen}{funcnum 0} 
+   \textcolor{OliveGreen}{funcint INTER1} 
+   \textcolor{OliveGreen}{start} 
+   \textcolor{OliveGreen}{  0.0  0.0} 
+   \textcolor{OliveGreen}{  1.0  1.0} 
+   \textcolor{OliveGreen}{end} 
+   
+\textcolor{Red}{$Function}
+\end{Verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Nuclear data}
+
+\subsection{Macroscopic cross sections}
+
+
+\begin{Verbatim}[frame=single,commandchars=\\\{\}]
+\textcolor{Red}{$cross_sections}
+
+     <material name> <0|1> <D> <XSa> <XSs> <nXSf> <eXSf> <chi>
+     
+\textcolor{Red}{$end_cross_sections}
+\end{Verbatim}
+
+\noindent
+Where \verb <D> are the diffusion coefficients given as:
+
+\begin{alltt}
+<D> = < \(D_{1}\) \(D_{2} \dots D_{g}\) > 
+\end{alltt}
+
+

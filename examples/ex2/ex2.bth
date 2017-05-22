@@ -1,0 +1,62 @@
+$Mesh 
+    mesh_file  ex2.msh
+$EndMesh 
+
+$Materials
+#   MAT    KIND   E         nu      ft      Gf         len
+   "MAT"   3      10.0e10   0.2     1.0e6   150.0e-3    0.001
+$EndMaterials
+
+$Mode
+  geoappr      SD
+  timedep      QSTATIC
+  t0           0.0 
+  tf           0.01   
+  steps        600      
+  algorithm    ARC_LENGTH_4
+  d_work       10000.0 0.01  0.4
+  r_tol        1.0e-5
+  max_its      100
+  k_restart    1
+$EndMode
+
+$Boundary
+  #      p   knd   fx  fy  fz
+"FIX_B"   1   111   0   0   0
+"FIX_F"   2   110   0   0   0
+"MOV_B"   3   001   1   0   0
+"MOV_F"   4   000   1   0   0
+$EndBoundary
+
+$Function
+  funcknd 1D
+  funcnum 0
+  funcint INTER1
+  start
+   0.0  0.0
+  end
+$EndFunction
+
+$Function
+  funcknd 1D
+  funcnum 1
+  funcint INTER1
+  start
+    0.0  0.0
+    1.0  1.0
+  end
+$EndFunction
+
+# prints vtk of damage variables
+$Output
+  kind 3
+  step 5000000
+  phys "MOV_B"
+$EndOutput
+
+# prints f_int vs displacement 
+$Output
+  file f_vs_u.dat
+  kind 2
+  phys "MOV_B"
+$EndOutput
