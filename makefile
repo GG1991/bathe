@@ -21,23 +21,20 @@ DEPS = ${DEP_DIR}/bathe.h              \
        ${DEP_DIR}/fun.h           
 
 OBJ  = ${OBJ_DIR}/bth_main.o           \
-       ${OBJ_DIR}/lst2msh.o            \
-       ${OBJ_DIR}/bth_parser.o         \
        ${OBJ_DIR}/bth_init.o           \
+       ${OBJ_DIR}/bth_finish.o         \
+       ${OBJ_DIR}/bth_parser.o         \
        ${OBJ_DIR}/bth_force.o          \
        ${OBJ_DIR}/bth_calc_k.o         \
        ${OBJ_DIR}/bth_property.o       \
-       ${OBJ_DIR}/bth_fini.o           \
        ${OBJ_DIR}/bth_elemental.o      \
        ${OBJ_DIR}/bth_strain.o         \
        ${OBJ_DIR}/bth_boundary.o       \
        ${OBJ_DIR}/bth_evolute.o        \
        ${OBJ_DIR}/bth_newrap.o         \
        ${OBJ_DIR}/bth_arclength_1.o    \
-       ${OBJ_DIR}/bth_arclength_2.o    \
-       ${OBJ_DIR}/bth_arclength_3.o    \
-       ${OBJ_DIR}/bth_arclength_4.o    \
        ${OBJ_DIR}/bth_output.o         \
+       ${OBJ_DIR}/lst2msh.o            \
        ${OBJ_DIR}/utils.o              \
        ${OBJ_DIR}/list.o               \
        ${OBJ_DIR}/gmsh.o               \
@@ -51,8 +48,11 @@ OBJ  = ${OBJ_DIR}/bth_main.o           \
 all: ${OBJ} 
 	gcc -o bathe $^ ${SLEPC_EPS_LIB} -lgsl -lgslcblas -lm
 	
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.c $(DEPS) 
+${OBJ_DIR}/%.o: ${SRC_DIR}/%.c $(DEPS) ${OBJ_DIR} 
 	${PETSC_COMPILE} -c ${CFLAGS} -o $@ $< -I${DEP_DIR} 
+
+${OBJ_DIR}:
+	mkdir $@
 
 clean_:	    
 	rm -f $(OBJ) bathe

@@ -116,41 +116,11 @@ typedef struct _arclength_1_t{
     int     max_its;
     int     k_restart;
     double  r_tol;
-    double  dlen;
-    list_t  dlam;       /* dlam increments used for arc-length method */ 
-
-}arclength_1_t;
-
-typedef struct _arclength_2_t{
-
-    int     max_its;
-    int     k_restart;
-    double  r_tol;
-    double  dlen;
-    list_t  dlam;       /* dlam increments used for arc-length method */ 
-
-}arclength_2_t;
-
-typedef struct _arclength_3_t{
-
-    int     max_its;
-    int     k_restart;
-    double  r_tol;
-    double  d_work;
-    list_t  dlam;       /* dlam increments used for arc-length method */ 
-
-}arclength_3_t;
-
-typedef struct _arclength_4_t{
-
-    int     max_its;
-    int     k_restart;
-    double  r_tol;
     double  d_work;
     double  a1;
     double  a2;
 
-}arclength_4_t;
+}arclength_1_t;
 
 typedef struct{
     
@@ -168,10 +138,7 @@ typedef struct{
     double          t;
     list_t          time;
 
-    arclength_1_t   arclen_1;
-    arclength_2_t   arclen_2;
-    arclength_3_t   arclen_3;
-    arclength_4_t   arclen_4;
+    arclength_1_t   *arclen_1;
 
 }calcu_t;
 

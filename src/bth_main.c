@@ -63,21 +63,6 @@ int main(int argc,char **argv){
         goto ERROR;
       break;
 
-    case AL2:
-      if(bth_arclength_2())
-        goto ERROR;
-      break;
-
-    case AL3:
-      if(bth_arclength_3())
-        goto ERROR;
-      break;
-    
-    case AL4:
-      if(bth_arclength_4())
-        goto ERROR;
-      break;
-
     default:
       goto ERROR;
 

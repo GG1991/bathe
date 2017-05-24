@@ -426,460 +426,14 @@ int parse_mode(void){
 
             /*
                algorithm    ARC_LENGTH_1
-               dlen         0.0
-               r_tol        1.0e-5
-               max_its      100
-               d_lam        0.0001
-               k_restart    1
-             */
-
-            calcu.algorithm = AL1;
-            list_init( &calcu.arclen_1.dlam, sizeof(double), NULL );
-
-            /* Reading dlen parameter */ 
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"dlen expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"dlen")){
-              PetscPrintf(PETSC_COMM_WORLD,"dlen expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"dlen value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_1.dlen=atof(data);
-
-            /* Reading r_tol parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"r_tol")){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_1.r_tol=atof(data);
-
-            /* Reading max_its parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"max_its")){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_1.max_its=atoi(data);
-
-            /* Reading d_lam parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"d_lam expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"d_lam")){
-              PetscPrintf(PETSC_COMM_WORLD,"d_lam expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-
-            while(data){
-
-              if(!data){
-                PetscPrintf(PETSC_COMM_WORLD,"d_lam value expected line %d.\n",ln);
-                return 1;
-              }
-              dlam = atof(data);
-              list_insertlast(&calcu.arclen_1.dlam,(void*)&dlam);
-
-              data = strtok(NULL," \n");    
-
-            }
-            if(calcu.arclen_1.dlam.sizelist != list_tf.sizelist){
-                PetscPrintf(PETSC_COMM_WORLD,"d_lam list should be the same size as time lapses line %d.\n",ln);
-                return 1;
-            }
-
-            /* Reading k_restart parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"k_restart")){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_1.k_restart=atof(data);
-
-          }else if(!strcmp(data,"ARC_LENGTH_2")){    
-
-            /*
-               algorithm    ARC_LENGTH_2
-               dlen         0.0
-               r_tol        1.0e-5
-               max_its      100
-               d_lam        0.0001
-               k_restart    1
-             */
-
-            calcu.algorithm = AL2;
-            list_init( &calcu.arclen_2.dlam, sizeof(double), NULL );
-
-            /* Reading dlen parameter */ 
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"dlen expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"dlen")){
-              PetscPrintf(PETSC_COMM_WORLD,"dlen expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"dlen value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_2.dlen=atof(data);
-
-            /* Reading r_tol parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"r_tol")){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_2.r_tol=atof(data);
-
-            /* Reading max_its parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"max_its")){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_2.max_its=atoi(data);
-
-            /* Reading d_lam parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"d_lam expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"d_lam")){
-              PetscPrintf(PETSC_COMM_WORLD,"d_lam expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-
-            while(data){
-
-              if(!data){
-                PetscPrintf(PETSC_COMM_WORLD,"d_lam value expected line %d.\n",ln);
-                return 1;
-              }
-              dlam = atof(data);
-              list_insertlast(&calcu.arclen_2.dlam,(void*)&dlam);
-
-              data = strtok(NULL," \n");    
-
-            }
-            if(calcu.arclen_2.dlam.sizelist != list_tf.sizelist){
-                PetscPrintf(PETSC_COMM_WORLD,"d_lam list should be the same size as time lapses line %d.\n",ln);
-                return 1;
-            }
-
-            /* Reading k_restart parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"k_restart")){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_2.k_restart=atof(data);
-
-          }else if(!strcmp(data,"ARC_LENGTH_3")){    
-
-            /*
-               algorithm    ARC_LENGTH_3
-               d_work       1.0e-5
-               r_tol        1.0e-5
-               max_its      100
-               d_lam        0.0001
-               k_restart    1
-             */
-
-            calcu.algorithm = AL3;
-            list_init( &calcu.arclen_3.dlam, sizeof(double), NULL );
-
-            /* Reading dlen parameter */ 
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"d_work expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"d_work")){
-              PetscPrintf(PETSC_COMM_WORLD,"d_work expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"d_work value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_3.d_work=atof(data);
-
-            /* Reading r_tol parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"r_tol")){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"r_tol value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_3.r_tol=atof(data);
-
-            /* Reading max_its parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"max_its")){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"max_its value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_3.max_its=atoi(data);
-
-            /* Reading d_lam parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"d_lam expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"d_lam")){
-              PetscPrintf(PETSC_COMM_WORLD,"d_lam expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-
-            while(data){
-
-              if(!data){
-                PetscPrintf(PETSC_COMM_WORLD,"d_lam value expected line %d.\n",ln);
-                return 1;
-              }
-              dlam = atof(data);
-              list_insertlast(&calcu.arclen_3.dlam,(void*)&dlam);
-
-              data = strtok(NULL," \n");    
-
-            }
-            if(calcu.arclen_3.dlam.sizelist != list_tf.sizelist){
-                PetscPrintf(PETSC_COMM_WORLD,"d_lam list should be the same size as time lapses line %d.\n",ln);
-                return 1;
-            }
-
-            /* Reading k_restart parameter */ 
-
-            if(!fgets(buf,NBUF,file)){
-              return 1;
-            }
-            ln ++;
-
-            data = strtok(buf," \n");    
-
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart expected line %d.\n",ln);
-              return 1;
-            }
-            if(strcmp(data,"k_restart")){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart expected line %d.\n",ln);
-              return 1;
-            }
-
-            data = strtok(NULL," \n");    
-            if(!data){
-              PetscPrintf(PETSC_COMM_WORLD,"k_restart value expected line %d.\n",ln);
-              return 1;
-            }
-            calcu.arclen_3.k_restart=atof(data);
-
-          }else if(!strcmp(data,"ARC_LENGTH_4")){    
-
-            /*
-               algorithm    ARC_LENGTH_4
                d_work       1.0e-5 0.001 0.6
                r_tol        1.0e-5
                max_its      100
                k_restart    1
              */
 
-            calcu.algorithm = AL4;
+            calcu.algorithm = AL1;
+	    calcu.arclen_1  = (arclength_1_t*)calloc(1,sizeof(arclength_1_t));
 
             /* Reading d_work parameter */ 
             if(!fgets(buf,NBUF,file)){
@@ -903,21 +457,21 @@ int parse_mode(void){
               PetscPrintf(PETSC_COMM_WORLD,"d_work value expected line %d.\n",ln);
               return 1;
             }
-            calcu.arclen_4.d_work=atof(data);
+            calcu.arclen_1->d_work=atof(data);
 
             data = strtok(NULL," \n");    
             if(!data){
               PetscPrintf(PETSC_COMM_WORLD,"d_work value expected line %d.\n",ln);
               return 1;
             }
-            calcu.arclen_4.a1=atof(data);
+            calcu.arclen_1->a1=atof(data);
             data = strtok(NULL," \n");    
 
             if(!data){
               PetscPrintf(PETSC_COMM_WORLD,"d_work value expected line %d.\n",ln);
               return 1;
             }
-            calcu.arclen_4.a2=atof(data);
+            calcu.arclen_1->a2=atof(data);
 
             /* Reading r_tol parameter */ 
 
@@ -942,7 +496,7 @@ int parse_mode(void){
               PetscPrintf(PETSC_COMM_WORLD,"r_tol value expected line %d.\n",ln);
               return 1;
             }
-            calcu.arclen_4.r_tol=atof(data);
+            calcu.arclen_1->r_tol=atof(data);
 
             /* Reading max_its parameter */ 
 
@@ -967,7 +521,7 @@ int parse_mode(void){
               PetscPrintf(PETSC_COMM_WORLD,"max_its value expected line %d.\n",ln);
               return 1;
             }
-            calcu.arclen_4.max_its=atoi(data);
+            calcu.arclen_1->max_its=atoi(data);
 
             /* Reading k_restart parameter */ 
 
@@ -992,7 +546,7 @@ int parse_mode(void){
               PetscPrintf(PETSC_COMM_WORLD,"k_restart value expected line %d.\n",ln);
               return 1;
             }
-            calcu.arclen_4.k_restart=atof(data);
+            calcu.arclen_1->k_restart=atof(data);
 
           }else{    
             PetscPrintf(PETSC_COMM_WORLD,"parser.c:Invalid option at line %d.\n",ln);
