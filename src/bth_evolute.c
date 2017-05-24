@@ -1,6 +1,6 @@
 /* evolutes material properties on elements */
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_evolute(int step, int flag_conv, Vec * u){
 

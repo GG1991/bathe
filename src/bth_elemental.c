@@ -1,6 +1,6 @@
 /* Assembly functions for Tangent matrix and residue*/
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_elem_intforce(int e, int *npe, int ix[NPE*DIM], double vec_e[NPE*DIM], Vec * u_local){
 

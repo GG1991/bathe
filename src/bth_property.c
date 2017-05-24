@@ -1,6 +1,6 @@
 /* Materials laws*/
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_property( int e, int input_i[10], double input_d[10], double strain[VOI], double c_t[VOI][VOI],     
     double stress[VOI], int flag, int output_i[10], double output_d[10]){

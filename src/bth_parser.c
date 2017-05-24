@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "global.h"
-#include "funct.h"
+#include "bathe.h"
 #include "list.h"
 #include "types.h"
 #include "mesh.h"

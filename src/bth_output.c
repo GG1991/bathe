@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "funct.h"
+#include "bathe.h"
 #include "global.h"
 #include "list.h"
 #include "gmsh.h"

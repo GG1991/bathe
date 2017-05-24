@@ -10,7 +10,7 @@ DEP_DIR=${PWD}/inc
 
 CFLAGS=-g -O0 
 	
-DEPS = ${DEP_DIR}/funct.h              \
+DEPS = ${DEP_DIR}/bathe.h              \
        ${DEP_DIR}/global.h             \
        ${DEP_DIR}/types.h              \
        ${DEP_DIR}/list.h               \
@@ -20,7 +20,7 @@ DEPS = ${DEP_DIR}/funct.h              \
        ${DEP_DIR}/utils.h              \
        ${DEP_DIR}/fun.h           
 
-OBJ  = ${OBJ_DIR}/main.o               \
+OBJ  = ${OBJ_DIR}/bth_main.o           \
        ${OBJ_DIR}/lst2msh.o            \
        ${OBJ_DIR}/bth_parser.o         \
        ${OBJ_DIR}/bth_init.o           \

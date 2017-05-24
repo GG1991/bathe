@@ -1,4 +1,4 @@
-#include "funct.h"
+#include "bathe.h"
 
 int bth_extforce(Vec *f_ext){
 

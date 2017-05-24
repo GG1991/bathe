@@ -1,4 +1,4 @@
-#include "funct.h"
+#include "bathe.h"
 
 int bth_strain(int npe, double disp[NPE][DIM], double derivs[NPE][DIM], double B[VOI][NPE*DIM], 
     double strain[VOI]){

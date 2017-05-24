@@ -1,4 +1,4 @@
-#include "funct.h"
+#include "bathe.h"
 
 int bth_newrap_1(void){
 

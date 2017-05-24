@@ -1,7 +1,7 @@
 
 /* Rutines for assembly K matrix */
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_calc_k(Mat * K, Vec *u){
 

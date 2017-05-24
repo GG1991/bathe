@@ -1,6 +1,6 @@
 /* frees all the memory */
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_fini(void){
 

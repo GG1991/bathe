@@ -8,7 +8,7 @@
  * 
  */
 
-#include "funct.h"
+#include "bathe.h"
 
 int cpynode (node_list_t *node_nl, node_t *node){
 

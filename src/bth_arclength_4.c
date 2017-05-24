@@ -18,7 +18,7 @@
 
  */
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_arclength_4(void){
 

@@ -2,7 +2,7 @@
  * 
  */
 
-#include "funct.h"
+#include "bathe.h"
 
 int bth_set_boundary(void){
 
