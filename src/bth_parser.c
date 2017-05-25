@@ -156,14 +156,9 @@ int parse_mats(void){
 int parse_mode(void){
 
   FILE   * file;   
-
   char   * data,buf[NBUF];
-
   int      fl,com,ln,auxi;
-
   double   auxd;
-  double   dlam;
-
   list_t   list_st, list_tf, list_dt;        
 
   list_init(&calcu.time, sizeof(tcontrol_t), cmp_time);
@@ -717,7 +712,7 @@ int parse_func(void){
   return 0;    
 }       
 
-/*******************************/
+/***************************************************/
 
 int parse_material(char *buff, pvl_t *mat){
 

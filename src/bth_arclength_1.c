@@ -5,6 +5,7 @@
    Thid method increase in one degree of freedom the complete set of equations in 
    order to impose the constrain condition. 
 
+   ************************************************************
    Dissipative Constrain Condition: 
    
    phi_d (u,lambda) = 0.5 * ( lambda_n-1 u - lambda u_n-1)*f - d_work_d = 0
@@ -13,8 +14,13 @@
    
    phi_u (u,lambda) = 0.5 * ( lambda u - lambda_n-1 u_n-1)*f - d_work_u = 0
 
+   ************************************************************
+
    ALGORITHM TAKEN FROM : "A new arc-length control method based on the rates 
    of the internal and dissipated energy"
+
+   Notes: 
+   * I think the matrix is not positive defined (proved with -pc_type lu)
 
  */
 
@@ -35,21 +41,19 @@ int bth_arclength_1(void){
   int           internal_energy;
   int         * index_k;
   int           index_i;
+  int           ksp_its;
+  int           reason;
 
   double        lambda, lambda_o;
-  double        d_work, d_work_u, d_work_d;
+  double        a1, a2, d_work, d_work_u, d_work_d;
   double        d_work_u_fixed, d_work_d_fixed;
   double        phi_d, phi_u, phi;
   double        energy_u, energy_d;
   double        r_tol;
   double        d_lam;
   double        norm;
-  double        dt;
-  double        t0;
-  double        tf;
+  double        dt, t0, tf;
   double        p_fu, p_fu_o;
-  double        a1;
-  double        a2;
   double      * v;
   double        w;
 
@@ -60,15 +64,16 @@ int bth_arclength_1(void){
   Vec           u;       /* displacement   at time  t                           */
   Vec           u_o;     /* displacement   at time  t-1                         */
   Vec           f_ext;   /* external force at time  t                           */
-  Vec           f_ext_l;   
   Vec           f_int;   /* internal force at time  t                           */
   Vec           R;       /* internal force at time  t                           */
   Vec           du;      /* delta u = u_i-1 - u_i-1 (not converged)             */
   Vec           b;       /* rhs vector to solve for du = Kt^-1 b (include BCs)  */
+  Vec           xlocal;  /* local vector to get values from distributed vector  */
 
   KSP           ksp;     /* linear solver context */
 
-  PC            pc;      /* preconditioner context */
+  PetscBool     set;
+  PetscBool     flg;
 
   /******************************/
   /* Alloc memory */ 
@@ -79,6 +84,13 @@ int bth_arclength_1(void){
     MatCreateAIJ(PETSC_COMM_WORLD,mesh.nnodes*DIM,mesh.nnodes*DIM,ntot*DIM+1,ntot*DIM+1,120,NULL,120,NULL,&Kt);
     VecCreateGhost(PETSC_COMM_WORLD,mesh.nnodes*DIM,ntot*DIM+1,mesh.nghost*DIM,(PetscInt*)ghost,&u); 
   }
+//  ierr = MatSetOption(Kt,MAT_SYMMETRIC,PETSC_TRUE);CHKERRQ(ierr);
+  MatIsSymmetricKnown(Kt,&set,&flg);
+  if(set == PETSC_TRUE){
+      if(flg == PETSC_TRUE){
+      }
+  }
+
   VecDuplicate(u,&u_o);
   VecDuplicate(u,&f_ext);
   VecDuplicate(u,&f_int);
@@ -97,9 +109,7 @@ int bth_arclength_1(void){
   /* Setting solver options */
 
   KSPCreate(PETSC_COMM_WORLD,&ksp);
-  KSPSetType(ksp,KSPGMRES);
-  KSPGetPC(ksp,&pc);
-  PCSetType(pc,PCLU);
+  KSPSetType(ksp,KSPCG);
   KSPSetFromOptions(ksp);
   KSPSetOperators(ksp,Kt,Kt);
  
@@ -190,12 +200,12 @@ int bth_arclength_1(void){
       if(tot_step == 1){
         phi = 0.0;
       }else if(tot_step == 2 ){
-        phi = -(lambda - d_work);
+        phi = d_work - lambda;
       }else{
         if(internal_energy == 1){
-          phi = - phi_u;
+          phi = phi_u/lambda;
         }else{
-          phi = - phi_d;
+          phi = phi_d/lambda_o;
         }
       }
       VecSetValues(b,1,&index_i,&phi,INSERT_VALUES);
@@ -218,10 +228,10 @@ int bth_arclength_1(void){
 
       VecGhostUpdateBegin(f_ext,INSERT_VALUES,SCATTER_FORWARD);
       VecGhostUpdateEnd(f_ext,INSERT_VALUES,SCATTER_FORWARD);
-      VecGhostGetLocalForm(f_ext,&f_ext_l);
+      VecGhostGetLocalForm(f_ext,&xlocal);
 
       /* Ahora armamos la columna "n" de la Kt y la fila "n" */
-      VecGetValues(f_ext_l,mesh.nnodes*DIM,index_k,v);
+      VecGetValues(xlocal,mesh.nnodes*DIM,index_k,v);
       for(i=0;i<mesh.nnodes*DIM;i++){
         v[i] *= -1.0;
       }
@@ -236,30 +246,19 @@ int bth_arclength_1(void){
           for(i=0;i<mesh.nnodes*DIM;i++){
             v[i] = 0.0;
           }
-        }else{
-          if(internal_energy == 1){
-            /* d phi / d u = 0.5 * lambda * f */
-            for(i=0;i<mesh.nnodes*DIM;i++){
-              v[i] *= -0.5*lambda;
-            }
-          }else{
-            /* d phi / d u = 0.5 * lambda_o * f */
-            for(i=0;i<mesh.nnodes*DIM;i++){
-              v[i] *= -0.5*lambda_o;
-            }
-          }
         }
+        
         MatSetValues(Kt,1,&index_i,mesh.nnodes*DIM,index_k,v,INSERT_VALUES);
         if(tot_step==2){
           /* d phi / d lam = 1 */
           w = 1;
         }else{
           if(internal_energy == 1){
-            /* d phi / d lam = 0.5 * f * u */
-            w = +0.5*p_fu;
+            /* (d phi / d lam) / (-0.5 * lambda)   = - f * u / lambda */
+            w = -p_fu/lambda;
           }else{
-            /* d phi / d lam = -0.5 * f * u_o */
-            w = -0.5*p_fu_o;
+            /* (d phi / d lam) / (-0.5 * lambda_o) = - f * u_o / lambda_o */
+            w =  p_fu_o/lambda_o;
           }
         }
         MatSetValues(Kt,1,&index_i,1,&index_i,&w,INSERT_VALUES);
@@ -280,13 +279,13 @@ int bth_arclength_1(void){
       /* Solve systems */ 
 
       KSPSolve(ksp,b,du);
+      KSPGetConvergedReason(ksp,&reason);
+      ierr = KSPGetIterationNumber(ksp,&ksp_its);CHKERRQ(ierr);
 
       if(rank == (nproc-1)){
         VecGetValues(du,1,&index_i,&d_lam);
       }
-  
-      lambda += d_lam; 
-
+      lambda += d_lam; /* Bcast */
       VecAXPY( u, 1.0, du);
 
       /******************************/
@@ -317,9 +316,9 @@ int bth_arclength_1(void){
           phi = -(lambda - d_work);
         }else{
           if(internal_energy == 1){
-            phi = - phi_u;
+            phi = phi_u/lambda;
           }else{
-            phi = - phi_d;
+            phi = phi_d/lambda_o;
           }
         }
         VecSetValues(b,1,&index_i,&phi,INSERT_VALUES);
@@ -336,7 +335,17 @@ int bth_arclength_1(void){
      
       its ++;
 
-      PetscPrintf(PETSC_COMM_WORLD,"AL1 it : %2d |R|=%e \n",its,norm); 
+      PetscPrintf(PETSC_COMM_WORLD,"AL1 it : %2d |R|=%e KSP it: %4d reason: ",its,norm,ksp_its); 
+      if(reason == KSP_CONVERGED_RTOL){
+	  PetscPrintf(PETSC_COMM_WORLD,"KSP_CONVERGED_RTOL"); 
+      }else if(reason == KSP_CONVERGED_ATOL){
+	  PetscPrintf(PETSC_COMM_WORLD,"KSP_CONVERGED_ATOL"); 
+      }else if(reason == KSP_CONVERGED_ITS){
+	  PetscPrintf(PETSC_COMM_WORLD,"KSP_CONVERGED_ITS"); 
+      }else{
+	  PetscPrintf(PETSC_COMM_WORLD,"%3d",reason); 
+      }
+      PetscPrintf(PETSC_COMM_WORLD,"\n"); 
 
     }
 

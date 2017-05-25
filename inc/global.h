@@ -28,6 +28,7 @@ enum {SEQUENCIAL, PARALLEL};
 enum {CONV_ON, CONV_OFF};
 
 PetscViewer        viewer;
+PetscErrorCode     ierr;
 KSPConvergedReason reason;
 
 int      rank;

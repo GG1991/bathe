@@ -43,16 +43,14 @@ OBJ  = ${OBJ_DIR}/bth_main.o           \
        ${OBJ_DIR}/fun.o           
        
 
-.PHONY: clean_
+.PHONY: clean_ 
 	
 all: ${OBJ} 
 	gcc -o bathe $^ ${SLEPC_EPS_LIB} -lgsl -lgslcblas -lm
 	
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.c $(DEPS) ${OBJ_DIR} 
+${OBJ_DIR}/%.o: ${SRC_DIR}/%.c $(DEPS)
+	@mkdir -p $(@D)
 	${PETSC_COMPILE} -c ${CFLAGS} -o $@ $< -I${DEP_DIR} 
-
-${OBJ_DIR}:
-	mkdir $@
 
 clean_:	    
 	rm -f $(OBJ) bathe
